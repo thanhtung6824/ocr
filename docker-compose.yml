@@ -1,0 +1,21 @@
+version: '2'
+services:
+  db:
+    image: mysql:8.0
+    expose:
+      - "3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: tungnpt
+      MYSQL_PASSWORD: tungpro123
+  web:
+    build: .
+    working_dir: /usr/src/app
+    command: /bin/bash startup.sh
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
