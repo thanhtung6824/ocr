@@ -9,6 +9,67 @@ router.get('/', (req, res) => {
     res.render('index', {title: 'Express'});
 });
 
+router.get('/listDocument', (req, res) => {
+    try {
+        const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
+        if (!apiKey) {
+            return res.json({
+                result_code: 405,
+                message: 'Not found api key',
+            });
+        }
+        const response = {
+            result_code: 200,
+            web_page: '...',
+            document: [
+                {
+                    id: 1,
+                    name: 'CMND/CCCD',
+                    name_en: 'CMND/CCCD',
+                    name_jp: 'CMND/CCCD',
+                    url: 'http://150.95.109.122:8080/id/v1/recognition',
+                    image: '',
+                    has_back: true,
+                    active: true,
+                    language: 'VN',
+                },
+                {
+                    id: 2,
+                    name: 'GPLX',
+                    name_en: 'GPLX',
+                    name_jp: 'GPLX',
+                    has_back: true,
+                    active: false,
+                    inactive_msg: 'Chức năng sẽ hoạt động vào ngày xxxx',
+                    inactive_msg_en: 'This function will available at xxxx',
+                    inactive_msg_jp: '機能はその日に動作します xxxx',
+                    language: 'VN',
+                },
+                {
+                    id: 3,
+                    name: 'HK',
+                    name_en: 'HK',
+                    name_jp: 'HK',
+                    has_back: true,
+                    active: false,
+                    inactive_msg: 'Chức năng sẽ hoạt động vào ngày xxxx',
+                    inactive_msg_en: 'This function will available at xxxx',
+                    inactive_msg_jp: '機能はその日に動作します xxxx',
+                    language: 'VN',
+                },
+            ],
+        };
+        return res.json(response);
+    } catch (err) {
+        return res.json({
+            result_code: 500,
+            message: 'Some error occurred. Please try again',
+            error: err.message,
+        });
+    }
+});
+
+
 router.use(async (req, res, next) => {
     try {
         const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
