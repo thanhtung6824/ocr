@@ -27,6 +27,9 @@ app.use('/', indexRouter);
 app.use((req, res, next) => {
     next(createError(404));
 });
+process.on('uncaughtException', function (err) {
+    console.log(err);
+});
 
 // error handler
 app.use((err, req, res) => {
