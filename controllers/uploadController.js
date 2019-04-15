@@ -144,7 +144,6 @@ module.exports = {
                 stream.on('end', () => stream.destroy());
                 const options = {
                     uri: constants.OCR_UPLOAD_API,
-                    proxy: 'http://150.95.109.122:8080',
                     method: 'POST',
                     headers: {
                         'api-key': req.headers.api_key,
