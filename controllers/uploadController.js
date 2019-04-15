@@ -36,7 +36,7 @@ const upload = multer({storage, fileFilter}).any();
 const beforeUpload = (req, res, next) => {
     upload(req, res, (err) => {
         if (err) {
-            if (req.files.length) {
+            if (req.files) {
                 deleteFile(req.files[0].path);
             }
             return res.json({
@@ -45,7 +45,7 @@ const beforeUpload = (req, res, next) => {
                 err: err.message,
             });
         }
-        if (req.files.length && req.files[0].size > 25411800) {
+        if (req.files && req.files[0].size > 25411800) {
             deleteFile(req.files[0].path);
             return res.json({
                 result_code: 422,
@@ -61,7 +61,7 @@ module.exports = {
     upload: async (req, res) => {
         beforeUpload(req, res, async () => { // eslint-disable-line
             try {
-                if (!req.files.length) {
+                if (!req.files) {
                     req.body.image = '';
                 } else {
                     req.body.image = `/uploads/${req.files[0].filename}`;
@@ -69,7 +69,7 @@ module.exports = {
                 req.checkBody(uploadValidator);
                 const errors = req.validationErrors();
                 if (errors) {
-                    if (req.files.length) {
+                    if (req.files) {
                         deleteFile(req.files[0].path);
                     }
                     return res.json({
@@ -106,9 +106,58 @@ module.exports = {
                 req.body.ocr_text = endCrypted(JSON.stringify(req.body.resultOcr));
                 await query.insertOcrRequest(req.body);
             } catch (err) { // eslint-disable-line
-                if (req.files.length) {
+                if (req.files) {
                     deleteFile(req.files[0].path);
                 }
+                return res.json({
+                    result_code: 500,
+                    message: 'Some error occurred. Please try again',
+                    error: err.message,
+                });
+            }
+        });
+    },
+    uploadTenTen: (req, res) => {
+        beforeUpload(req, res, async () => {
+            try {
+                if (!req.files) {
+                    req.body.image = '';
+                } else {
+                    req.body.image = `/uploads/${req.files[0].filename}`;
+                }
+                req.checkBody(uploadValidator);
+                const errors = req.validationErrors();
+                if (errors) {
+                    if (req.files) {
+                        deleteFile(req.files[0].path);
+                    }
+                    return res.json({
+                        result_code: 422,
+                        errors,
+                    });
+                }
+                const formData = {};
+                const stream = fs.createReadStream(req.files[0].path);
+                formData.image = stream;
+                formData.encode = req.body.encode;
+                stream.on('end', () => stream.destroy());
+                const options = {
+                    uri: constants.OCR_UPLOAD_API,
+                    method: 'POST',
+                    headers: {
+                        'api-key': req.headers.api_key,
+                    },
+                    formData,
+                    json: true,
+                };
+                const result = await rp(options);
+                return res.json(result);
+            } catch (err) {
+                console.log(err);
+                if (req.files) {
+                    deleteFile(req.files[0].path);
+                }
+
                 return res.json({
                     result_code: 500,
                     message: 'Some error occurred. Please try again',

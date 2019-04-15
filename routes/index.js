@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     res.render('index', {title: 'Express'});
 });
 
-router.get('/listDocument', (req, res) => {
+router.use(async (req, res, next) => {
     try {
         const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
         if (!apiKey) {
@@ -18,6 +18,24 @@ router.get('/listDocument', (req, res) => {
                 message: 'Not found api key',
             });
         }
+        if (apiKey !== 'a08eb42a-4a57-449b-84f4-1f67219f2679') {
+            return res.json({
+                result_code: 405,
+                message: 'Api key not valid',
+            });
+        }
+        return next();
+    } catch (err) {
+        return res.json({
+            result_code: 500,
+            message: 'Some error occurred. Please try again',
+            error: err.message,
+        });
+    }
+});
+
+router.get('/listDocument', (req, res) => {
+    try {
         const response = {
             result_code: 200,
             web_page: '...',
@@ -69,34 +87,36 @@ router.get('/listDocument', (req, res) => {
     }
 });
 
+router.post('/upload', uploadController.uploadTenTen);
 
-router.use(async (req, res, next) => {
-    try {
-        const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
-        if (!apiKey) {
-            return res.json({
-                result_code: 405,
-                message: 'Not found api key',
-            });
-        }
-        const isApiKeyValid = await clientService.isApiKeyValid(apiKey);
-        if (!isApiKeyValid) {
-            return res.json({
-                result_code: 405,
-                message: 'Api key not valid',
-            });
-        }
-        return next();
-    } catch (err) {
-        return res.json({
-            result_code: 500,
-            message: 'Some error occurred. Please try again',
-            error: err.message,
-        });
-    }
-});
 
-router.post('/test', uploadController.upload);
+// router.use(async (req, res, next) => {
+//     try {
+//         const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
+//         if (!apiKey) {
+//             return res.json({
+//                 result_code: 405,
+//                 message: 'Not found api key',
+//             });
+//         }
+//         const isApiKeyValid = await clientService.isApiKeyValid(apiKey);
+//         if (!isApiKeyValid) {
+//             return res.json({
+//                 result_code: 405,
+//                 message: 'Api key not valid',
+//             });
+//         }
+//         return next();
+//     } catch (err) {
+//         return res.json({
+//             result_code: 500,
+//             message: 'Some error occurred. Please try again',
+//             error: err.message,
+//         });
+//     }
+// });
+//
+// router.post('/test', uploadController.upload);
 
 
 module.exports = router;
