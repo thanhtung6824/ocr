@@ -36,6 +36,7 @@ const upload = multer({storage, fileFilter}).any();
 const beforeUpload = (req, res, next) => {
     upload(req, res, (err) => {
         if (err) {
+            console.log(err);
             if (req.files) {
                 deleteFile(req.files[0].path);
             }
