@@ -174,7 +174,7 @@ module.exports = {
                     uri: constants.OCR_UPLOAD_API,
                     method: 'POST',
                     headers: {
-                        'api-key': req.headers.api_key,
+                        'api-key': 'a08eb42a-4a57-449b-84f4-1f67219f2679',
                     },
                     formData,
                     json: true,
