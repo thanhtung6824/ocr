@@ -235,9 +235,9 @@ module.exports = {
 
                 const response = [];
                 await Promise.all([0, 1].map(async (val) => {
-                    if (val === 1) {
-                        await timeout(1000);
-                    }
+                    // if (val === 1) {
+                    //     await timeout(1000);
+                    // }
                     const formData = {};
                     const stream = val === 0 ? fs.createReadStream(req.files.image_front[0].path)
                         : fs.createReadStream(req.files.image_back[0].path);
@@ -248,7 +248,7 @@ module.exports = {
                         uri: constants.OCR_UPLOAD_API,
                         method: 'POST',
                         headers: {
-                            'api-key': req.headers.api_key,
+                            'api-key': 'a08eb42a-4a57-449b-84f4-1f67219f2679',
                         },
                         formData,
                         json: true,
