@@ -1,6 +1,7 @@
 const express = require('express');
 const clientService = require('../services/client');
 const uploadController = require('../controllers/uploadController');
+const calculateController = require('../controllers/calculateController');
 
 const router = express.Router();
 
@@ -87,7 +88,8 @@ router.get('/listDocument', (req, res) => {
     }
 });
 
-router.post('/upload', uploadController.uploadTenTen);
+router.post('/upload_single', uploadController.uploadSingleTenTen);
+router.post('/upload_multiple', uploadController.uploadMultipleTenTen);
 
 
 // router.use(async (req, res, next) => {
@@ -99,13 +101,14 @@ router.post('/upload', uploadController.uploadTenTen);
 //                 message: 'Not found api key',
 //             });
 //         }
-//         const isApiKeyValid = await clientService.isApiKeyValid(apiKey);
+//         const {isApiKeyValid, clientId} = await clientService.isApiKeyValid(apiKey);
 //         if (!isApiKeyValid) {
 //             return res.json({
 //                 result_code: 405,
 //                 message: 'Api key not valid',
 //             });
 //         }
+//         req.currentClient = clientId;
 //         return next();
 //     } catch (err) {
 //         return res.json({
@@ -117,6 +120,7 @@ router.post('/upload', uploadController.uploadTenTen);
 // });
 //
 // router.post('/test', uploadController.upload);
-
+//
+// router.post('/calculateMoney', calculateController.calMoney);
 
 module.exports = router;
