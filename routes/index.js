@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 router.use(async (req, res, next) => {
     try {
         const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
+        console.log(req.headers)
         if (!apiKey) {
             return res.json({
                 result_code: 405,
