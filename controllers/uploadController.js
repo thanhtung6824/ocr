@@ -46,7 +46,7 @@ const beforeUpload = (req, res, next) => {
                 err: err.message,
             });
         }
-        if (req.files && req.files.length && req.files[0].size > 25411800) {
+        if (req.files.length && req.files[0].size > 25411800) {
             deleteFile(req.files[0].path);
             return res.json({
                 result_code: 422,
@@ -88,10 +88,12 @@ module.exports = {
                     });
                 }
                 const formData = {};
-                const stream = fs.createReadStream(req.files[0].path);
-                formData.image = stream;
-                formData.encode = req.body.encode;
-                stream.on('end', () => stream.destroy());
+                if (req.body.encode === 1) {
+                    const stream = fs.createReadStream(req.files[0].path);
+                    formData.image = stream;
+                    formData.encode = req.body.encode;
+                    stream.on('end', () => stream.destroy());
+                }
                 const options = {
                     uri: constants.OCR_UPLOAD_API,
                     method: 'POST',
@@ -123,10 +125,20 @@ module.exports = {
     uploadTenTen: (req, res) => {
         beforeUpload(req, res, async () => {
             try {
+                let filePath = '';
                 if (!req.files.length) {
                     req.body.image = '';
                 } else {
                     req.body.image = `/uploads/${req.files[0].filename}`;
+                }
+                if (+req.body.encode === 2) {
+                    const PhotoCode = Math.random();
+                    const fileName = PhotoCode + Date.now() + '.jpg';
+                    filePath = path.join(__dirname, '../public/uploads/' + fileName);
+                    fs.writeFileSync(filePath,
+                        Buffer.from(req.body.image),
+                        "base64");
+                    req.body.image = `/uploads/${fileName}`;
                 }
                 req.checkBody(uploadValidator);
                 const errors = req.validationErrors();
@@ -140,10 +152,17 @@ module.exports = {
                     });
                 }
                 const formData = {};
-                const stream = fs.createReadStream(req.files[0].path);
-                formData.image = stream;
-                formData.encode = req.body.encode;
-                stream.on('end', () => stream.destroy());
+                if (req.body.encode === 1) {
+                    const stream = fs.createReadStream(req.files[0].path);
+                    formData.image = stream;
+                    formData.encode = req.body.encode;
+                    stream.on('end', () => stream.destroy());
+                } else {
+                    const stream = fs.createReadStream(filePath);
+                    formData.image = stream;
+                    formData.encode = req.body.encode;
+                    stream.on('end', () => stream.destroy());
+                }
                 const options = {
                     uri: constants.OCR_UPLOAD_API,
                     method: 'POST',
