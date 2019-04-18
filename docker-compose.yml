@@ -5,10 +5,10 @@ services:
     ports:
       - '3307:3307'
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: Run@12345
       MYSQL_DATABASE: test
       MYSQL_USER: tungnpt
-      MYSQL_PASSWORD: tungpro123
+      MYSQL_PASSWORD: Run@1234
   web:
     build: .
     working_dir: /usr/src/app

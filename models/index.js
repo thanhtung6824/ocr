@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const shared = require('../helpers/shared');
 
 const db = {};
 
@@ -21,6 +22,12 @@ models.forEach((file) => {
 sequelize.sync({})
     .then(async () => {
         console.log('Database & tables created!');
+        // await shared.generatedDataClient(db);
+        // await shared.generatedDataPricePlan(db);
+        // await shared.generatedDataPriceLevel(db);
+        // await shared.generatedDataCampaign(db);
+        // await shared.generatedDataClientPrice(db);
+        // await shared.generatedDataClientContract(db);
         // await db.client.create({
         //     name: 'test',
         //     address: 'test',

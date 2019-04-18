@@ -34,5 +34,5 @@ module.exports = (sequelize, type) => sequelize.define('client_price_plan', {
             key: 'id',
         },
     },
-    status: type.STRING,
+    using_status: type.BOOLEAN,
 });

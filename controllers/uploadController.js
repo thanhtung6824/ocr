@@ -7,7 +7,7 @@ const clientService = require('../services/client');
 const query = require('../query');
 const {
     deleteFile,
-    endCrypted,
+    enCrypted,
     deCrypted,
 } = require('../helpers/shared');
 const constants = require('../constants/constants');
@@ -37,7 +37,7 @@ const beforeUpload = (req, res, next) => {
     upload(req, res, (err) => {
         if (err) {
             console.log(err);
-            if (req.files) {
+            if (req.files.length) {
                 deleteFile(req.files[0].path);
             }
             return res.json({
@@ -46,7 +46,7 @@ const beforeUpload = (req, res, next) => {
                 err: err.message,
             });
         }
-        if (req.files && req.files[0].size > 25411800) {
+        if (req.files && req.files.length && req.files[0].size > 25411800) {
             deleteFile(req.files[0].path);
             return res.json({
                 result_code: 422,
@@ -62,7 +62,7 @@ module.exports = {
     upload: async (req, res) => {
         beforeUpload(req, res, async () => { // eslint-disable-line
             try {
-                if (!req.files) {
+                if (!req.files.length) {
                     req.body.image = '';
                 } else {
                     req.body.image = `/uploads/${req.files[0].filename}`;
@@ -70,7 +70,7 @@ module.exports = {
                 req.checkBody(uploadValidator);
                 const errors = req.validationErrors();
                 if (errors) {
-                    if (req.files) {
+                    if (req.files.length) {
                         deleteFile(req.files[0].path);
                     }
                     return res.json({
@@ -79,6 +79,7 @@ module.exports = {
                     });
                 }
                 req.body.api_key = req.headers.api_key || req.body.api_key || req.query.api_key;
+                req.body.client_id = req.currentClient;
                 const allowUsing = await clientService.checkAllowUsing(req.body);
                 if (allowUsing[0].using_status !== 1) {
                     return res.json({
@@ -86,7 +87,6 @@ module.exports = {
                         message: 'Please recharge to continue using',
                     });
                 }
-                req.body.client_id = allowUsing[0].client_id;
                 const formData = {};
                 const stream = fs.createReadStream(req.files[0].path);
                 formData.image = stream;
@@ -102,10 +102,12 @@ module.exports = {
                     json: true,
                 };
                 deleteFile(req.files[0].path);
-                req.body.resultOcr = await rp(options);
+                const resultOcr = await rp(options);
+                req.body.resultOcr = resultOcr;
                 await query.insertClientRequest(req.body);
-                req.body.ocr_text = endCrypted(JSON.stringify(req.body.resultOcr));
+                req.body.ocr_text = enCrypted(JSON.stringify(req.body.resultOcr));
                 await query.insertOcrRequest(req.body);
+                return res.json(resultOcr);
             } catch (err) { // eslint-disable-line
                 if (req.files) {
                     deleteFile(req.files[0].path);
@@ -121,7 +123,7 @@ module.exports = {
     uploadTenTen: (req, res) => {
         beforeUpload(req, res, async () => {
             try {
-                if (!req.files) {
+                if (!req.files.length) {
                     req.body.image = '';
                 } else {
                     req.body.image = `/uploads/${req.files[0].filename}`;
@@ -129,7 +131,7 @@ module.exports = {
                 req.checkBody(uploadValidator);
                 const errors = req.validationErrors();
                 if (errors) {
-                    if (req.files) {
+                    if (req.files.length) {
                         deleteFile(req.files[0].path);
                     }
                     return res.json({
@@ -144,7 +146,6 @@ module.exports = {
                 stream.on('end', () => stream.destroy());
                 const options = {
                     uri: constants.OCR_UPLOAD_API,
-                    proxy: 'http://150.95.109.122:8080',
                     method: 'POST',
                     headers: {
                         'api-key': req.headers.api_key,
@@ -156,7 +157,7 @@ module.exports = {
                 return res.json(result);
             } catch (err) {
                 console.log(err);
-                if (req.files) {
+                if (req.files.length) {
                     deleteFile(req.files[0].path);
                 }
 
