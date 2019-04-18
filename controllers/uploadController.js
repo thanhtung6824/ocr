@@ -8,6 +8,7 @@ const query = require('../query');
 const {
     deleteFile,
     enCrypted,
+    timeout,
 } = require('../helpers/shared');
 const constants = require('../constants/constants');
 const {uploadSingleValidator, uploadMultipleValidator} = require('../validator/uploadValidator');
@@ -231,11 +232,15 @@ module.exports = {
                         errors,
                     });
                 }
+
                 const response = [];
                 await Promise.all([0, 1].map(async (val) => {
+                    if (val === 1) {
+                        await timeout(1000);
+                    }
                     const formData = {};
-                    const stream = val === 0 ? fs.createReadStream(req.files.image_front[0].path) :
-                        fs.createReadStream(req.files.image_back[0].path);
+                    const stream = val === 0 ? fs.createReadStream(req.files.image_front[0].path)
+                        : fs.createReadStream(req.files.image_back[0].path);
                     formData.image = stream;
                     formData.encode = req.body.encode;
                     stream.on('end', () => stream.destroy());
@@ -252,7 +257,7 @@ module.exports = {
                     response.push(result);
                 }));
                 return res.json(response);
-            } catch (err) {
+            } catch (err) { // eslint-disable-line
                 console.log(err);
                 if (req.files.image_front) {
                     deleteFile(req.files.image_front[0].path);
