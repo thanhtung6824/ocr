@@ -47,7 +47,7 @@ router.get('/listDocument', (req, res) => {
                     name: 'CMND/CCCD',
                     name_en: 'CMND/CCCD',
                     name_jp: 'CMND/CCCD',
-                    url: 'http://150.95.109.122:8080/id/v1/recognition',
+                    url: 'http://apitenten.smartocr.vn/id/v1/recognition',
                     image: '',
                     has_back: true,
                     active: true,
