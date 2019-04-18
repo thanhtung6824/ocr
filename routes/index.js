@@ -88,7 +88,8 @@ router.get('/listDocument', (req, res) => {
     }
 });
 
-router.post('/upload', uploadController.uploadTenTen);
+router.post('/upload_single', uploadController.uploadSingleTenTen);
+router.post('/upload_multiple', uploadController.uploadMultipleTenTen);
 
 
 // router.use(async (req, res, next) => {
