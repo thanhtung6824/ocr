@@ -6,10 +6,6 @@ const calculateController = require('../controllers/calculateController');
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', (req, res) => {
-    res.render('index', {title: 'Express'});
-});
-
 router.use(async (req, res, next) => {
     try {
         const apiKey = req.headers['api-key'];
@@ -33,6 +29,10 @@ router.use(async (req, res, next) => {
             error: err.message,
         });
     }
+});
+
+router.get('/', (req, res) => {
+    res.render('index', {title: 'Express'});
 });
 
 router.get('/listDocument', (req, res) => {
