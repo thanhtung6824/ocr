@@ -1,3 +1,6 @@
 (function () {
-    angular.module('ocrApp', []);
+    angular.module('ocrApp', [
+        'app.core',
+        'app.logger',
+    ]);
 })();

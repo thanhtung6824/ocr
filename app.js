@@ -6,16 +6,19 @@ const logger = require('morgan');
 // require('./models');
 const expressValidator = require('express-validator');
 const hbs = require('express-handlebars');
+const configRoutes = require('./configs/configRoutes');
 
 const indexRouter = require('./routes/index');
+const viewRouter = require('./routes/views');
 
 const app = express();
+
 
 app.engine('hbs', hbs({
     extname: 'hbs',
     defaultLayout: 'layout',
-    partialsDir: path.join(__dirname, 'views/partials'),
-    layoutsDir: path.join(__dirname, 'views/layouts'),
+    partialsDir: __dirname + '/views/partials', //eslint-disable-line
+    layoutsDir: __dirname + '/views/layouts/', //eslint-disable-line
 }));
 
 
@@ -29,7 +32,9 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', indexRouter);
+
+app.use('/api', configRoutes.checkApiKey, indexRouter);
+app.use('/views', viewRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
