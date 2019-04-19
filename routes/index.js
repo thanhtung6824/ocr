@@ -37,6 +37,7 @@ router.get('/', (req, res) => {
 // });
 
 router.get('/listDocument', (req, res) => {
+    console.log(req.headers);
     try {
         const response = {
             result_code: 200,
