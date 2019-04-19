@@ -2,6 +2,7 @@ const express = require('express');
 const clientService = require('../services/client');
 const uploadController = require('../controllers/uploadController');
 const calculateController = require('../controllers/calculateController');
+const constants = require('../constants/constants');
 
 const router = express.Router();
 
@@ -36,18 +37,17 @@ router.get('/', (req, res) => {
 });
 
 router.get('/listDocument', (req, res) => {
-    console.log(req.headers);
     try {
         const response = {
             result_code: 200,
-            web_page: '...',
+            web_page: 'https://smartocr.vn/',
             document: [
                 {
                     id: 1,
                     name: 'CMND/CCCD',
                     name_en: 'CMND/CCCD',
                     name_jp: 'CMND/CCCD',
-                    url: 'http://apitenten.smartocr.vn/id/v1/recognition',
+                    url: constants.OCR_UPLOAD_API,
                     image: '',
                     has_back: true,
                     active: true,
