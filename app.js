@@ -5,11 +5,18 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 // require('./models');
 const expressValidator = require('express-validator');
-
+const hbs = require('express-handlebars');
 
 const indexRouter = require('./routes/index');
 
 const app = express();
+
+app.engine('hbs', hbs({
+    extname: 'hbs',
+    defaultLayout: 'layout',
+    partialsDir: path.join(__dirname, 'views/partials'),
+    layoutsDir: path.join(__dirname, 'views/layouts'),
+}));
 
 
 // view engine setup
