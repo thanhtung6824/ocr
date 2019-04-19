@@ -47,7 +47,7 @@ router.get('/listDocument', (req, res) => {
                     name: 'CMND/CCCD',
                     name_en: 'CMND/CCCD',
                     name_jp: 'CMND/CCCD',
-                    url: constants.OCR_UPLOAD_API_APP,
+                    url: constants.OCR_UPLOAD_API,
                     image: '',
                     has_back: true,
                     active: true,
