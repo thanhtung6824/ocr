@@ -100,39 +100,39 @@ router.get('/listDocument', (req, res) => {
     }
 });
 
+
+router.use(async (req, res, next) => {
+    try {
+        const apiKey = req.headers['api-key'];
+        if (!apiKey) {
+            return res.json({
+                result_code: 405,
+                message: 'Not found api key',
+            });
+        }
+        const {isApiKeyValid, clientId} = await clientService.isApiKeyValid(apiKey);
+        if (!isApiKeyValid) {
+            return res.json({
+                result_code: 405,
+                message: 'Api key not valid',
+            });
+        }
+        req.currentClient = clientId;
+        return next();
+    } catch (err) {
+        return res.json({
+            result_code: 500,
+            message: 'Some error occurred. Please try again',
+            error: err.message,
+        });
+    }
+});
+
 router.post('/upload_single', uploadController.uploadSingleTenTen);
 router.post('/upload_multiple', uploadController.uploadMultipleTenTen);
 
-//
-// router.use(async (req, res, next) => {
-//     try {
-//         const apiKey = req.headers['api-key'];
-//         if (!apiKey) {
-//             return res.json({
-//                 result_code: 405,
-//                 message: 'Not found api key',
-//             });
-//         }
-//         const {isApiKeyValid, clientId} = await clientService.isApiKeyValid(apiKey);
-//         if (!isApiKeyValid) {
-//             return res.json({
-//                 result_code: 405,
-//                 message: 'Api key not valid',
-//             });
-//         }
-//         req.currentClient = clientId;
-//         return next();
-//     } catch (err) {
-//         return res.json({
-//             result_code: 500,
-//             message: 'Some error occurred. Please try again',
-//             error: err.message,
-//         });
-//     }
-// });
-//
-// router.post('/test', uploadController.upload);
-//
-// router.post('/calculateMoney', calculateController.calMoney);
-//
+router.post('/test', uploadController.upload);
+
+router.post('/calculateMoney', calculateController.calMoney);
+
 module.exports = router;
