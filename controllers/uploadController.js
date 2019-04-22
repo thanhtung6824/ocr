@@ -1,6 +1,7 @@
 const path = require('path');
 const multer = require('multer');
 const rp = require('request-promise');
+const sharp = require('sharp');
 const fs = require('fs');
 const uploadService = require('../services/upload');
 const clientService = require('../services/client');
@@ -165,13 +166,17 @@ module.exports = {
                         errors,
                     });
                 }
+                console.log(typeof req.file.size);
+                if (req.file.size > 1024 * 1024) {
+
+                }
                 const formData = {};
                 const stream = fs.createReadStream(req.file.path);
                 formData.image = stream;
                 formData.encode = req.body.encode;
                 stream.on('end', () => stream.destroy());
                 const options = {
-                    uri: constants.OCR_LOCAL_UPLOAD_API,
+                    uri: constants.OCR_UPLOAD_API,
                     method: 'POST',
                     headers: {
                         'api-key': req.headers['api-key'],
