@@ -198,10 +198,18 @@ module.exports = {
                     formData,
                     json: true,
                 };
-                const result = await rp(options);
-                return res.json(result);
+                req.body.client_id = req.currentClient;
+                const resultOcr = await rp(options);
+                req.body.resultOcr = resultOcr;
+                await query.insertClientRequest(req.body);
+                req.body.ocr_text = enCrypted(JSON.stringify(req.body.resultOcr));
+                await query.insertOcrRequest(req.body);
+                return res.json(resultOcr);
             } catch (err) { // eslint-disable-line
                 console.log(err);
+                req.body.resultOcr = {};
+                req.body.resultOcr.result_code = 503;
+                await query.insertClientRequest(req.body);
                 if (req.file) {
                     deleteFile(req.file.path);
                 }
@@ -287,11 +295,14 @@ module.exports = {
                     req.files.image_back[0].path = path.join(__dirname, `../public/uploads/${fileName}.jpg`);
                 }
 
+                req.body.client_id = req.currentClient;
 
                 const response = [];
                 await Promise.all([0, 1].map(async (val) => {
+                    req.body.image = req.body.image_front;
                     if (val === 1) {
                         await timeout(1000);
+                        req.body.image = req.body.image_back;
                     }
                     const formData = {};
                     const stream = val === 0 ? fs.createReadStream(req.files.image_front[0].path)
@@ -308,18 +319,27 @@ module.exports = {
                         formData,
                         json: true,
                     };
-                    const result = await rp(options);
-                    response.push(result);
+                    const resultOcr = await rp(options);
+                    req.body.resultOcr = resultOcr;
+                    await query.insertClientRequest(req.body);
+                    req.body.ocr_text = enCrypted(JSON.stringify(req.body.resultOcr));
+                    await query.insertOcrRequest(req.body);
+                    response.push(resultOcr);
                 }));
                 return res.json(response);
             } catch (err) { // eslint-disable-line
                 console.log(err);
+                req.body.resultOcr = {};
+                req.body.resultOcr.result_code = 503;
+                await query.insertClientRequest(req.body);
                 if (req.files.image_front) {
                     deleteFile(req.files.image_front[0].path);
                 }
                 if (req.files.image_back) {
                     deleteFile(req.files.image_back[0].path);
                 }
+                req.body.resultOcr.result_code = 503;
+                await query.insertClientRequest(req.body);
                 return res.json({
                     result_code: 500,
                     message: 'Some error occurred. Please try again',
