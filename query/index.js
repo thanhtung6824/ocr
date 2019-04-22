@@ -40,35 +40,23 @@ module.exports = {
             const endOfMonth = moment().endOf('month').format('YYYY-MM-DD HH:mm:ss');
 
             const response = await sequelize.query(`
-            SELECT 
-              client_requests.id,
-                 CONCAT('response',response_code) response_code,
-              COUNT(case 
-              when client_requests.response_code = 200 then 
-              1 else 0
-               end) 
-
---              (
---               SELECT SUM(case 
---               when client_requests.response_code = 200 then 
---               1 else 0
---                end) FROM client_requests)
-                
-                as resquest200,
-              client_price_plan_id,
-              client_requests.client_id, 
-              response_code,
-              client_requests.createdAt, 
-              client_requests.updatedAt 
-            FROM client_requests
-            JOIN client_price_plans
-            ON client_requests.client_price_plan_id = client_price_plans.id
-            JOIN price_levels
-            ON client_requests.client_price_plan_id = price_levels.price_plan_id
-            WHERE client_requests.createdAt >= '${startOfMonth}'
-            AND client_requests.createdAt <= '${endOfMonth}'
-            AND client_requests.client_id = '${data.client_id}'
-            GROUP BY client_requests.id
+            SELECT cr.id,
+                SUM(cr.response_code = 200) AS cnt200,
+                SUM(cr.response_code = 500) AS cnt500,
+                SUM(cr.response_code = 503) AS cnt503,
+                MIN(cr.createdAt),
+                MAX(cr.updatedAt)
+            FROM client_requests cr 
+                INNER JOIN 
+                 (
+                 SELECT * FROM  
+                  client_price_plans cpp 
+                  GROUP BY cpp.id
+                 ) ON cr.client_price_plan_id = cpp.id AND cr.client_id = cpp.client_id
+                INNER JOIN price_levels pl ON cpp.id = pl.price_plan_id
+            WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                AND cr.client_id = '${data.client_id}'
+            GROUP BY cr.id
             `, {type: sequelize.QueryTypes.SELECT});
             return Promise.resolve(response);
         } catch (err) {

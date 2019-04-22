@@ -34,7 +34,7 @@ const fileFilter = (req, file, cb) => {
 const multerOptions = {
     storage,
     fileFilter,
-    limits: {fileSize: 25411800},
+    limits: {fileSize: 1024 * 1024 * 2},
 };
 
 const uploadSingle = multer(multerOptions).single('image');
@@ -171,10 +171,10 @@ module.exports = {
                 formData.encode = req.body.encode;
                 stream.on('end', () => stream.destroy());
                 const options = {
-                    uri: constants.OCR_UPLOAD_API,
+                    uri: constants.OCR_LOCAL_UPLOAD_API,
                     method: 'POST',
                     headers: {
-                        'api-key': 'a08eb42a-4a57-449b-84f4-1f67219f2679',
+                        'api-key': req.headers['api-key'],
                     },
                     formData,
                     json: true,
@@ -245,10 +245,10 @@ module.exports = {
                     formData.encode = req.body.encode;
                     stream.on('end', () => stream.destroy());
                     const options = {
-                        uri: constants.OCR_UPLOAD_API,
+                        uri: constants.OCR_LOCAL_UPLOAD_API,
                         method: 'POST',
                         headers: {
-                            'api-key': 'a08eb42a-4a57-449b-84f4-1f67219f2679',
+                            'api-key': req.headers['api-key'],
                         },
                         formData,
                         json: true,
