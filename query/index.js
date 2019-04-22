@@ -45,18 +45,14 @@ module.exports = {
                 SUM(cr.response_code = 500) AS cnt500,
                 SUM(cr.response_code = 503) AS cnt503,
                 MIN(cr.createdAt),
-                MAX(cr.updatedAt)
+                MAX(cr.updatedAt),
+                pl.from
             FROM client_requests cr 
-                INNER JOIN 
-                 (
-                 SELECT * FROM  
-                  client_price_plans cpp 
-                  GROUP BY cpp.id
-                 ) ON cr.client_price_plan_id = cpp.id AND cr.client_id = cpp.client_id
+                INNER JOIN  client_price_plans cpp ON cr.client_price_plan_id = cpp.id AND cr.client_id = cpp.client_id
                 INNER JOIN price_levels pl ON cpp.id = pl.price_plan_id
             WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
                 AND cr.client_id = '${data.client_id}'
-            GROUP BY cr.id
+            GROUP BY cr.id, pl.id, cpp.id
             `, {type: sequelize.QueryTypes.SELECT});
             return Promise.resolve(response);
         } catch (err) {

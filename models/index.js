@@ -4,9 +4,8 @@ const path = require('path');
 const shared = require('../helpers/shared');
 
 const db = {};
-
 const models = fs.readdirSync(path.join(__dirname));
-const sequelize = new Sequelize('mysql://root:tungpro123@localhost:3306/test', {
+const sequelize = new Sequelize('mysql://tungnpt:Run@1234@localhost:3306/test', {
     // Look to the next section for possible options
 });
 db.sequelize = sequelize;
