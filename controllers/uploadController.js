@@ -19,8 +19,8 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, '../public/uploads/'));
     },
     filename: (req, file, cb) => {
-        const PhotoCode = Math.random();
-        const fileName = PhotoCode + Date.now() + path.extname(file.originalname);
+        const photoCode = Math.random();
+        const fileName = photoCode + Date.now() + path.extname(file.originalname);
         cb(null, fileName);
     },
 });
@@ -35,7 +35,7 @@ const fileFilter = (req, file, cb) => {
 const multerOptions = {
     storage,
     fileFilter,
-    limits: {fileSize: 1024 * 1024 * 2},
+    limits: {fileSize: 1024 * 1024 * 3},
 };
 
 const uploadSingle = multer(multerOptions).single('image');
@@ -166,9 +166,22 @@ module.exports = {
                         errors,
                     });
                 }
-                console.log(typeof req.file.size);
-                if (req.file.size > 1024 * 1024) {
-
+                if (req.file.size > 1024 * 1024 * 3) {
+                    const photoCode = Math.random();
+                    const fileName = photoCode + Date.now();
+                    const imageResize = await sharp(req.file.path)
+                        .resize({width: 1980})
+                        .toFile(path.join(__dirname, `../public/uploads/${fileName}.jpg`));
+                    if (imageResize.size > 1024 * 1024 * 3) {
+                        deleteFile(req.file.path);
+                        deleteFile(path.join(__dirname, `../public/uploads/${fileName}.jpg`));
+                        return res.json({
+                            result_code: 500,
+                            message: 'Image too large',
+                        });
+                    }
+                    deleteFile(req.file.path);
+                    req.file.path = path.join(__dirname, `../public/uploads/${fileName}.jpg`);
                 }
                 const formData = {};
                 const stream = fs.createReadStream(req.file.path);
@@ -176,7 +189,7 @@ module.exports = {
                 formData.encode = req.body.encode;
                 stream.on('end', () => stream.destroy());
                 const options = {
-                    uri: constants.OCR_UPLOAD_API,
+                    uri: constants.OCR_LOCAL_UPLOAD_API,
                     method: 'POST',
                     headers: {
                         'api-key': req.headers['api-key'],
@@ -237,6 +250,42 @@ module.exports = {
                         errors,
                     });
                 }
+                if (req.files.image_front[0].size > 1024 * 1024) {
+                    const photoCode = Math.random();
+                    const fileName = photoCode + Date.now();
+                    const imageResizeFront = await sharp(req.files.image_front[0].path)
+                        .resize({width: 1980})
+                        .toFile(path.join(__dirname, `../public/uploads/${fileName}.jpg`));
+                    if (imageResizeFront.size > 1024 * 1024 * 3) {
+                        deleteFile(req.files.image_front[0].path);
+                        deleteFile(path.join(__dirname, `../public/uploads/${fileName}.jpg`));
+                        return res.json({
+                            result_code: 500,
+                            message: 'Image front too large',
+                        });
+                    }
+                    deleteFile(req.files.image_front[0].path);
+                    req.files.image_front[0].path = path.join(__dirname, `../public/uploads/${fileName}.jpg`);
+                }
+
+                if (req.files.image_back[0].size > 1024 * 1024) {
+                    const photoCode = Math.random();
+                    const fileName = photoCode + Date.now();
+                    const imageResizeBack = await sharp(req.files.image_back[0].path)
+                        .resize({width: 1980})
+                        .toFile(path.join(__dirname, `../public/uploads/${fileName}.jpg`));
+                    if (imageResizeBack.size > 1024 * 1024 * 3) {
+                        deleteFile(req.files.image_back[0].path);
+                        deleteFile(path.join(__dirname, `../public/uploads/${fileName}.jpg`));
+                        return res.json({
+                            result_code: 500,
+                            message: 'Image back too large',
+                        });
+                    }
+                    deleteFile(req.files.image_back[0].path);
+                    req.files.image_back[0].path = path.join(__dirname, `../public/uploads/${fileName}.jpg`);
+                }
+
 
                 const response = [];
                 await Promise.all([0, 1].map(async (val) => {
