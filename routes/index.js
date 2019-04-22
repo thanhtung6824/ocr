@@ -95,7 +95,7 @@ router.post('/upload_multiple', uploadController.uploadMultipleTenTen);
 
 // router.use(async (req, res, next) => {
 //     try {
-//         const apiKey = req.headers.api_key || req.body.api_key || req.query.api_key;
+//         const apiKey = req.headers['api-key'];
 //         if (!apiKey) {
 //             return res.json({
 //                 result_code: 405,
@@ -123,5 +123,5 @@ router.post('/upload_multiple', uploadController.uploadMultipleTenTen);
 // router.post('/test', uploadController.upload);
 //
 // router.post('/calculateMoney', calculateController.calMoney);
-
+//
 module.exports = router;
