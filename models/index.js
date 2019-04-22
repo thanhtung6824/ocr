@@ -21,12 +21,12 @@ models.forEach((file) => {
 sequelize.sync({})
     .then(async () => {
         console.log('Database & tables created!');
-        await shared.generatedDataClient(db);
-        await shared.generatedDataPricePlan(db);
-        await shared.generatedDataPriceLevel(db);
-        await shared.generatedDataCampaign(db);
-        await shared.generatedDataClientPrice(db);
-        await shared.generatedDataClientContract(db);
+        // await shared.generatedDataClient(db);
+        // await shared.generatedDataPricePlan(db);
+        // await shared.generatedDataPriceLevel(db);
+        // await shared.generatedDataCampaign(db);
+        // await shared.generatedDataClientPrice(db);
+        // await shared.generatedDataClientContract(db);
     });
 
 module.exports = db;
