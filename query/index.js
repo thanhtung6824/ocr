@@ -40,13 +40,19 @@ module.exports = {
             const endOfMonth = moment().endOf('month').format('YYYY-MM-DD HH:mm:ss');
 
             const response = await sequelize.query(`
-            SELECT cr.id,
-                SUM(cr.response_code = 200) AS cnt200,
+            SELECT cr.id AS client_request_id,
+                (
+                SELECT SUM(case 
+                when client_requests.response_code = 200 then 
+                1 else 0
+                end) FROM client_requests) as resquest200,
                 SUM(cr.response_code = 500) AS cnt500,
                 SUM(cr.response_code = 503) AS cnt503,
                 MIN(cr.createdAt),
                 MAX(cr.updatedAt),
-                pl.from
+                pl.from,
+                pl.to,
+                pl.price
             FROM client_requests cr 
                 INNER JOIN  client_price_plans cpp ON cr.client_price_plan_id = cpp.id AND cr.client_id = cpp.client_id
                 INNER JOIN price_levels pl ON cpp.id = pl.price_plan_id
@@ -54,6 +60,7 @@ module.exports = {
                 AND cr.client_id = '${data.client_id}'
             GROUP BY cr.id, pl.id, cpp.id
             `, {type: sequelize.QueryTypes.SELECT});
+            console.log(response);
             return Promise.resolve(response);
         } catch (err) {
             return Promise.reject(err);

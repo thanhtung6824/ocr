@@ -21,66 +21,12 @@ models.forEach((file) => {
 sequelize.sync({})
     .then(async () => {
         console.log('Database & tables created!');
-        // await shared.generatedDataClient(db);
-        // await shared.generatedDataPricePlan(db);
-        // await shared.generatedDataPriceLevel(db);
-        // await shared.generatedDataCampaign(db);
-        // await shared.generatedDataClientPrice(db);
-        // await shared.generatedDataClientContract(db);
-        // await db.client.create({
-        //     name: 'test',
-        //     address: 'test',
-        //     email: 'test@gmail.com',
-        //     phone: '123456789',
-        //     api_key: 'a08eb42a-4a57-449b-84f4-1f67219f2679',
-        //     status: 'active',
-        //     price: 5000000,
-        // });
-        // await db.price_plan.create({
-        //     request_limit: 50,
-        //     name: 'plan1',
-        //     status: 'active',
-        // });
-        // await db.price_level.create({
-        //     price_plan_id: 1,
-        //     from: 1,
-        //     to: 100,
-        //     price: 100000,
-        //     status: 'active',
-        //     order: 1,
-        // });
-        // await db.price_level.create({
-        //     price_plan_id: 1,
-        //     from: 101,
-        //     to: 200,
-        //     price: 150000,
-        //     status: 'active',
-        //     order: 2,
-        // });
-        //
-        // await db.campaign.create({
-        //     from: '2019-04-09T04:21:18.000Z',
-        //     to: '2019-04-09T05:21:18.000Z',
-        //     type: '%',
-        //     discount: 10,
-        //     status: 'active',
-        // });
-        // await db.client_price_plan.create({
-        //     price_level_id: 1,
-        //     client_id: 1,
-        //     campaign_id: 1,
-        //     status: 'using',
-        //     request_limit: 100,
-        // });
-        // await db.client_contract.create({
-        //     client_price_plan_id: 1,
-        //     client_id: 1,
-        //     status: 'active',
-        //     from_time: '2019-04-09T04:21:18.000Z',
-        //     to_time: '2019-04-09T05:21:18.000Z',
-        //     using_status: true,
-        //     payment_status: true,
-        // });
+        await shared.generatedDataClient(db);
+        await shared.generatedDataPricePlan(db);
+        await shared.generatedDataPriceLevel(db);
+        await shared.generatedDataCampaign(db);
+        await shared.generatedDataClientPrice(db);
+        await shared.generatedDataClientContract(db);
     });
 
 module.exports = db;

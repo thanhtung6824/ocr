@@ -39,7 +39,7 @@ module.exports = {
                 address: Math.random().toString(36).substr(2, 5) + ' ' + Math.random().toString(36).substr(2, 5), //eslint-disable-line
                 email: Math.random().toString(36).substr(2, 5) + '@gmail.com', //eslint-disable-line
                 phone: Math.floor(Math.random() * 1000000000),
-                api_key: `${crypto.randomBytes(16)}`,
+                api_key: Math.random().toString(36).substring(2),
                 status: 'active',
                 price: Math.floor(Math.random() * 1000000000),
             });
