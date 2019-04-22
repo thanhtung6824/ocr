@@ -182,6 +182,7 @@ module.exports = {
                     }
                     deleteFile(req.file.path);
                     req.file.path = path.join(__dirname, `../public/uploads/${fileName}.jpg`);
+                    req.body.image = `/uploads/${fileName}.jpg`;
                 }
                 const formData = {};
                 const stream = fs.createReadStream(req.file.path);
