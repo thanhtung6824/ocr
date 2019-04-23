@@ -34,33 +34,47 @@ module.exports = {
             return Promise.reject(err);
         }
     },
-    test: async (data) => {
+    countRequest: async (data) => {
         try {
             const startOfMonth = moment().startOf('month').format('YYYY-MM-DD HH:mm:ss');
             const endOfMonth = moment().endOf('month').format('YYYY-MM-DD HH:mm:ss');
-
             const response = await sequelize.query(`
-            SELECT cr.id AS client_request_id,
-                (
-                SELECT SUM(case 
-                when client_requests.response_code = 200 then 
-                1 else 0
-                end) FROM client_requests) as resquest200,
-                SUM(cr.response_code = 500) AS cnt500,
-                SUM(cr.response_code = 503) AS cnt503,
-                MIN(cr.createdAt),
-                MAX(cr.updatedAt),
-                pl.from,
-                pl.to,
-                pl.price
-            FROM client_requests cr 
-                INNER JOIN  client_price_plans cpp ON cr.client_price_plan_id = cpp.id AND cr.client_id = cpp.client_id
-                INNER JOIN price_levels pl ON cpp.id = pl.price_plan_id
-            WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
-                AND cr.client_id = '${data.client_id}'
-            GROUP BY cr.id, pl.id, cpp.id
+               SELECT 
+                   pl.from,
+                   pl.to,
+                   pl.price,
+                   (
+                     SELECT
+                       SUM(cr.response_code = 200)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS total200,
+                   (
+                     SELECT
+                       SUM(cr.response_code = 500)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS total500,
+                   (
+                     SELECT
+                       SUM(cr.response_code = 503)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS total503,
+                   (
+                     SELECT
+                       COUNT(cr.response_code)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS totalAll
+               FROM price_levels pl
+                   JOIN client_price_plans cpp ON cpp.price_plan_id = pl.price_plan_id AND cpp.client_id = '${data.client_id}'
+                 
             `, {type: sequelize.QueryTypes.SELECT});
-            console.log(response);
             return Promise.resolve(response);
         } catch (err) {
             return Promise.reject(err);

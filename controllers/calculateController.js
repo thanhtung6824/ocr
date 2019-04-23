@@ -1,11 +1,11 @@
-const query = require('../query');
+const calCulateServices = require('../services/calculate');
 
 module.exports = {
     calMoney: async (req, res) => {
         try {
             req.body.client_id = req.currentClient;
-            const testTime = await query.test(req.body);
-            res.json(testTime);
+            const money = await calCulateServices.calculateMoney(req.body);
+            return res.json(money);
         } catch (err) {
             return res.json({
                 result_code: 500,

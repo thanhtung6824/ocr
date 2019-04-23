@@ -301,7 +301,7 @@ module.exports = {
                 await Promise.all([0, 1].map(async (val) => {
                     req.body.image = req.body.image_front;
                     if (val === 1) {
-                        await timeout(1000);
+                        await timeout(1500);
                         req.body.image = req.body.image_back;
                     }
                     const formData = {};
