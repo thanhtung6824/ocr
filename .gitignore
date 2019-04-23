@@ -4,3 +4,4 @@
 npm-debug.log
 /configs/database.js
 /yarn.lock
+/public/.DS_Store
