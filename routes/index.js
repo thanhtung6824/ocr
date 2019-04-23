@@ -21,7 +21,7 @@ router.get('/listDocument', (req, res) => {
                     id: 1,
                     name: 'CMND/CCCD',
                     url: constants.OCR_UPLOAD_API_APP,
-                    image: '/images/apply.png',
+                    image: 'https://tenten.smartocr.vn/images/apply.png',
                     has_back: true,
                     active: true,
                     language: 'VN',
@@ -29,7 +29,7 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 2,
                     name: 'Văn bản từ giấy tờ',
-                    image: '/images/apply2.png',
+                    image: 'https://tenten.smartocr.vn/images/apply2.png',
                     has_back: true,
                     active: false,
                     inactive_msg: 'Chức năng sẽ hoạt động vào ngày YYYY/MM/DD',
@@ -40,7 +40,7 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 3,
                     name: 'Văn bản viết tay',
-                    image: '/images/apply3.png',
+                    image: 'https://tenten.smartocr.vn/images/apply3.png',
                     has_back: true,
                     active: false,
                     inactive_msg: 'Chức năng sẽ hoạt động vào ngày YYYY/MM/DD',
@@ -51,7 +51,7 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 4,
                     name: 'IMEI',
-                    image: '/images/apply4.png',
+                    image: 'https://tenten.smartocr.vn/images/apply4.png',
                     has_back: true,
                     active: false,
                     inactive_msg: 'Chức năng sẽ hoạt động vào ngày YYYY/MM/DD',
