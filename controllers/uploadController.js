@@ -166,6 +166,17 @@ module.exports = {
                         errors,
                     });
                 }
+                req.body.client_id = req.currentClient;
+                const allowUsing = await clientService.checkAllowUsing(req.body);
+                if (allowUsing[0].using_status !== 1) {
+                    if (req.file) {
+                        deleteFile(req.file.path);
+                    }
+                    return res.json({
+                        result_code: 500,
+                        message: 'Please recharge to continue using',
+                    });
+                }
                 if (req.file.size > 1024 * 1024 * 3) {
                     const photoCode = Math.random();
                     const fileName = photoCode + Date.now();
@@ -198,7 +209,6 @@ module.exports = {
                     formData,
                     json: true,
                 };
-                req.body.client_id = req.currentClient;
                 const resultOcr = await rp(options);
                 req.body.resultOcr = resultOcr;
                 await query.insertClientRequest(req.body);
@@ -259,6 +269,20 @@ module.exports = {
                         errors,
                     });
                 }
+                req.body.client_id = req.currentClient;
+                const allowUsing = await clientService.checkAllowUsing(req.body);
+                if (allowUsing[0].using_status !== 1) {
+                    if (req.files.image_front) {
+                        deleteFile(req.files.image_front[0].path);
+                    }
+                    if (req.files.image_back) {
+                        deleteFile(req.files.image_back[0].path);
+                    }
+                    return res.json({
+                        result_code: 500,
+                        message: 'Please recharge to continue using',
+                    });
+                }
                 if (req.files.image_front[0].size > 1024 * 1024) {
                     const photoCode = Math.random();
                     const fileName = photoCode + Date.now();
@@ -294,9 +318,6 @@ module.exports = {
                     deleteFile(req.files.image_back[0].path);
                     req.files.image_back[0].path = path.join(__dirname, `../public/uploads/${fileName}.jpg`);
                 }
-
-                req.body.client_id = req.currentClient;
-
                 const response = [];
                 await Promise.all([0, 1].map(async (val) => {
                     req.body.image = req.body.image_front;

@@ -30,4 +30,5 @@ module.exports = (sequelize, type) => sequelize.define('client_report', {
     total_all: type.INTEGER,
     total_amount: type.INTEGER,
     amount_info: type.JSON,
+    using_status: type.INTEGER,
 });

@@ -24,9 +24,8 @@ module.exports = (sequelize, type) => sequelize.define('client_contract', {
             key: 'id',
         },
     },
-    status: type.STRING,
     from_time: type.DATE,
     to_time: type.DATE,
-    using_status: type.BOOLEAN,
-    payment_status: type.BOOLEAN,
+    using_status: type.INTEGER,
+    payment_status: type.INTEGER,
 });

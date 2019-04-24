@@ -1,10 +1,10 @@
-const calCulateServices = require('../services/calculate');
+const calculateServices = require('../services/calculate');
 
 module.exports = {
     calMoney: async (req, res) => {
         try {
             req.body.client_id = req.currentClient;
-            const money = await calCulateServices.calculateMoney(req.body);
+            const money = await calculateServices.calculateMoney(req.body);
             return res.json(money);
         } catch (err) {
             return res.json({

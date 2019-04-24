@@ -27,4 +27,5 @@ module.exports = (sequelize, type) => sequelize.define('ocr_request', {
     result_code: type.INTEGER,
     file_path: type.STRING,
     ocr_text: type.TEXT,
+    using_status: type.INTEGER,
 });

@@ -8,5 +8,5 @@ module.exports = (sequelize, type) => sequelize.define('campaign', {
     to: type.DATE,
     type: type.STRING,
     discount: type.DECIMAL(15, 2),
-    status: type.STRING,
+    using_status: type.INTEGER,
 });

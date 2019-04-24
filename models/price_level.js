@@ -17,5 +17,5 @@ module.exports = (sequelize, type) => sequelize.define('price_level', {
     from: type.INTEGER,
     to: type.INTEGER,
     price: type.DECIMAL(15, 2),
-    status: type.STRING,
+    using_status: type.INTEGER,
 });

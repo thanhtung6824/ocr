@@ -15,5 +15,5 @@ module.exports = (sequelize, type) => sequelize.define('client_charge', {
         },
     },
     price: type.DECIMAL(15, 2),
-    status: type.STRING,
+    using_status: type.INTEGER,
 });

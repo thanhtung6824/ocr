@@ -29,7 +29,7 @@ module.exports = {
             email: Math.random().toString(36).substr(2, 5) + '@gmail.com', //eslint-disable-line
             phone: Math.floor(Math.random() * 1000000000),
             api_key: 'a08eb42a-4a57-449b-84f4-1f67219f2679',
-            status: 'active',
+            using_status: 1,
             price: Math.floor(Math.random() * 1000000000),
         });
 
@@ -40,7 +40,7 @@ module.exports = {
                 email: Math.random().toString(36).substr(2, 5) + '@gmail.com', //eslint-disable-line
                 phone: Math.floor(Math.random() * 1000000000),
                 api_key: Math.random().toString(36).substring(2),
-                status: 'active',
+                using_status: 1,
                 price: Math.floor(Math.random() * 1000000000),
             });
         }
@@ -49,7 +49,7 @@ module.exports = {
         for (let i = 0; i <= 5; i += 1) {
             await models.price_plan.create({ //eslint-disable-line
                 name: `plan${i}`,
-                status: 'active',
+                using_status: 1,
             });
         }
     },
@@ -60,35 +60,42 @@ module.exports = {
                 from: 1,
                 to: 100,
                 price: Math.floor(Math.random() * 90000) + 100000,
-                status: 'active',
+                using_status: 1,
             });
             await models.price_level.create({ //eslint-disable-line
                 price_plan_id: i,
                 from: 101,
                 to: 200,
                 price: Math.floor(Math.random() * 90000) + 100000,
-                status: 'active',
+                using_status: 1,
             });
             await models.price_level.create({ //eslint-disable-line
                 price_plan_id: i,
                 from: 201,
                 to: 300,
                 price: Math.floor(Math.random() * 90000) + 100000,
-                status: 'active',
+                using_status: 1,
             });
             await models.price_level.create({ //eslint-disable-line
                 price_plan_id: i,
                 from: 301,
                 to: 400,
                 price: Math.floor(Math.random() * 90000) + 100000,
-                status: 'active',
+                using_status: 1,
             });
             await models.price_level.create({ //eslint-disable-line
                 price_plan_id: i,
                 from: 401,
                 to: 500,
                 price: Math.floor(Math.random() * 90000) + 100000,
-                status: 'active',
+                using_status: 1,
+            });
+            await models.price_level.create({ //eslint-disable-line
+                price_plan_id: i,
+                from: 501,
+                to: 5000000,
+                price: Math.floor(Math.random() * 90000) + 100000,
+                using_status: 1,
             });
         }
     },
@@ -98,7 +105,7 @@ module.exports = {
             to: '2019-04-09T05:21:18.000Z',
             type: '%',
             discount: 10,
-            status: 'active',
+            using_status: 1,
         });
     },
     generatedDataClientPrice: async (models) => {
@@ -107,7 +114,7 @@ module.exports = {
                 price_plan_id: Math.floor(Math.random() * 5) + 1,
                 client_id: i,
                 campaign_id: 1,
-                using_status: true,
+                using_status: 1,
             });
         }
     },
@@ -119,8 +126,8 @@ module.exports = {
                 status: 'active',
                 from_time: '2019-04-09T04:21:18.000Z',
                 to_time: '2019-04-09T05:21:18.000Z',
-                using_status: true,
-                payment_status: true,
+                using_status: 1,
+                payment_status: 1,
             });
         }
     },

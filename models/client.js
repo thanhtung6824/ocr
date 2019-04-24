@@ -9,6 +9,6 @@ module.exports = (sequelize, type) => sequelize.define('client', {
     email: type.STRING,
     phone: type.STRING,
     api_key: type.STRING,
-    status: type.STRING,
+    using_status: type.INTEGER,
     price: type.DECIMAL(15, 2),
 });
