@@ -58,7 +58,7 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 2,
                     name: 'Văn bản từ giấy tờ',
-                    image: 'https://tenten.smartocr.vn/images/hoadon.png',
+                    image: 'https://tenten.smartocr.vn/images/hoadon.jpg',
                     has_back: true,
                     active: false,
                     inactive_msg: 'Chức năng sẽ hoạt động vào ngày YYYY/MM/DD',
@@ -69,7 +69,7 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 3,
                     name: 'Văn bản viết tay',
-                    image: 'https://tenten.smartocr.vn/images/viettay.png',
+                    image: 'https://tenten.smartocr.vn/images/viettay.jpg',
                     has_back: true,
                     active: false,
                     inactive_msg: 'Chức năng sẽ hoạt động vào ngày YYYY/MM/DD',
