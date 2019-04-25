@@ -53,6 +53,8 @@ module.exports = {
                     request200: 0,
                     request500: 0,
                     request503: 0,
+                    from: val.from,
+                    to: val.to,
                 };
             });
             const moneyNoCampaign = await countMoneyNoCampaigns(data, requestLevel, amountInfo);
