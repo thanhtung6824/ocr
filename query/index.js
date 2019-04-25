@@ -47,7 +47,7 @@ module.exports = {
             INSERT INTO ocr_requests(client_request_id, client_id, result_code, file_path, ocr_text, using_status, createdAt, updatedAt)
             VALUES 
               (
-                LAST_INSERT_ID(), 
+                ${data.lastInsertId}, 
                 ${data.client_id}, 
                 ${data.resultOcr.result_code}, 
                 '${data.image}', 
@@ -71,6 +71,7 @@ module.exports = {
                    pl.from,
                    pl.to,
                    pl.price,
+                   cpp.id as client_price_plan_id,
                    (
                      SELECT
                        SUM(cr.response_code = 200)
@@ -78,7 +79,7 @@ module.exports = {
                        WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
                        AND cr.client_id = '${data.client_id}'
                        AND cr.campaign_id IS NULL
-                   )  AS total200,
+                   )  AS total200NoCampaign,
                    (
                      SELECT
                        SUM(cr.response_code = 500)
@@ -86,7 +87,7 @@ module.exports = {
                        WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
                        AND cr.client_id = '${data.client_id}'
                        AND cr.campaign_id IS NULL
-                   )  AS total500,
+                   )  AS total500NoCampaign,
                    (
                      SELECT
                        SUM(cr.response_code = 503)
@@ -94,7 +95,7 @@ module.exports = {
                        WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
                        AND cr.client_id = '${data.client_id}'
                        AND cr.campaign_id IS NULL
-                   )  AS total503,
+                   )  AS total503NoCampaign,
                    (
                      SELECT
                        COUNT(cr.response_code)
@@ -102,6 +103,34 @@ module.exports = {
                        WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
                        AND cr.client_id = '${data.client_id}'
                        AND cr.campaign_id IS NULL
+                   )  AS totalAllNoCampaign,
+                   (
+                     SELECT
+                       SUM(cr.response_code = 200)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS total200,
+                   (
+                     SELECT
+                       SUM(cr.response_code = 500)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS total500,
+                   (
+                     SELECT
+                       SUM(cr.response_code = 503)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
+                   )  AS total503,
+                   (
+                     SELECT
+                       COUNT(cr.response_code)
+                       FROM client_requests cr 
+                       WHERE cr.createdAt BETWEEN '${startOfMonth}' AND '${endOfMonth}'
+                       AND cr.client_id = '${data.client_id}'
                    )  AS totalAll
                FROM price_levels pl
                    JOIN client_price_plans cpp ON cpp.price_plan_id = pl.price_plan_id AND cpp.client_id = '${data.client_id}'
