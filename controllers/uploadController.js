@@ -211,7 +211,8 @@ module.exports = {
                 };
                 const resultOcr = await rp(options);
                 req.body.resultOcr = resultOcr;
-                await query.insertClientRequest(req.body);
+                const insertData = await query.insertClientRequest(req.body);
+                req.body.lastInsertId = insertData[0]; //eslint-disable-line
                 req.body.ocr_text = enCrypted(JSON.stringify(req.body.resultOcr));
                 await query.insertOcrRequest(req.body);
                 return res.json(resultOcr);
