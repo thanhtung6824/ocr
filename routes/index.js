@@ -2,6 +2,7 @@ const express = require('express');
 const clientService = require('../services/client');
 const uploadController = require('../controllers/uploadController');
 const calculateController = require('../controllers/calculateController');
+const viewController = require('../controllers/viewController');
 const constants = require('../constants/constants');
 
 const router = express.Router();
@@ -143,9 +144,7 @@ router.get('/listDocument', (req, res) => {
 
 router.post('/upload_single', uploadController.uploadSingleTenTen);
 router.post('/upload_multiple', uploadController.uploadMultipleTenTen);
-
-router.post('/test', uploadController.upload);
-
 router.post('/calculateMoney', calculateController.calMoney);
+router.get('/viewRequests', viewController.viewRequests);
 
 module.exports = router;
