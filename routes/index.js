@@ -45,7 +45,7 @@ router.get('/listDocument', (req, res) => {
     try {
         const response = {
             result_code: 200,
-            web_page: 'https://smartocr.vn/',
+            web_page: constants.WEB_PAGE,
             document: [
                 {
                     id: 1,
