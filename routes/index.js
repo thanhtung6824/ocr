@@ -92,9 +92,9 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 5,
                     name: '運転免許証',
-                    has_back: true,
+                    has_back: false,
                     url: constants.OCR_BLX_JP,
-                    image: 'https://tenten.smartocr.vn/images/blx_jp.jpg',
+                    image: 'https://tenten.smartocr.vn/images/blx_jp.png',
                     active: true,
                     inactive_msg: constants.INACTIVE_MSG_VN,
                     inactive_msg_en: 'This function will available at xxxx',
