@@ -60,7 +60,7 @@ router.get('/listDocument', (req, res) => {
                     id: 2,
                     name: 'Hộ chiếu',
                     image: 'https://tenten.smartocr.vn/images/passport.png',
-                    has_back: true,
+                    has_back: false,
                     active: true,
                     url: constants.OCR_PASSPORT_VN,
                     language: 'VN',
