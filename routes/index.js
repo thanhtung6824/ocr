@@ -110,7 +110,7 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 7,
                     name: 'パスポート',
-                    image: 'https://tenten.smartocr.vn/images/passport.png',
+                    image: 'https://tenten.smartocr.vn/images/passport_jp.png',
                     has_back: false,
                     active: true,
                     url: constants.OCR_PASSPORT_JP,
