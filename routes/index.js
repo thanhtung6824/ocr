@@ -150,7 +150,7 @@ router.get('/listDocument', (req, res) => {
                     id: 11,
                     name: 'Bằng lái xe',
                     has_back: false,
-                    image: 'https://tenten.smartocr.vn/images/blx_jp.png',
+                    image: 'https://tenten.smartocr.vn/images/blx_vn.png',
                     active: true,
                     url: constants.OCR_BLX_VN,
                     language: 'VN',
