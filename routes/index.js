@@ -146,6 +146,15 @@ router.get('/listDocument', (req, res) => {
                     inactive_msg_jp: constants.INACTIVE_MSG_JP,
                     language: 'JP',
                 },
+                {
+                    id: 11,
+                    name: 'Bằng lái xe',
+                    has_back: false,
+                    image: 'https://tenten.smartocr.vn/images/blx_jp.png',
+                    active: true,
+                    url: constants.OCR_BLX_VN,
+                    language: 'VN',
+                },
             ],
         };
         return res.json(response);
