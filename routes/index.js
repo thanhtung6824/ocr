@@ -49,7 +49,7 @@ router.get('/listDocument', (req, res) => {
             document: [
                 {
                     id: 1,
-                    name: 'CMND/CCCD',
+                    name: 'ID card',
                     url: constants.OCR_UPLOAD_API_APP,
                     image: 'https://tenten.smartocr.vn/images/cmt.png',
                     has_back: true,
@@ -58,7 +58,7 @@ router.get('/listDocument', (req, res) => {
                 },
                 {
                     id: 2,
-                    name: 'Hộ chiếu',
+                    name: 'Passport',
                     image: 'https://tenten.smartocr.vn/images/passport.png',
                     has_back: false,
                     active: true,
@@ -67,7 +67,7 @@ router.get('/listDocument', (req, res) => {
                 },
                 {
                     id: 3,
-                    name: 'Văn bản từ giấy tờ',
+                    name: 'Document',
                     image: 'https://tenten.smartocr.vn/images/hoadon.jpg',
                     has_back: true,
                     active: false,
@@ -78,7 +78,7 @@ router.get('/listDocument', (req, res) => {
                 },
                 {
                     id: 4,
-                    name: 'Văn bản viết tay',
+                    name: 'Written document',
                     image: 'https://tenten.smartocr.vn/images/viettay.jpg',
                     has_back: true,
                     active: false,
@@ -148,7 +148,7 @@ router.get('/listDocument', (req, res) => {
                 },
                 {
                     id: 11,
-                    name: 'Bằng lái xe',
+                    name: 'Driving license',
                     has_back: false,
                     image: 'https://tenten.smartocr.vn/images/blx_vn.png',
                     active: true,
