@@ -119,11 +119,10 @@ router.get('/listDocument', (req, res) => {
                 {
                     id: 8,
                     name: '保険証',
-                    has_back: true,
-                    active: false,
-                    inactive_msg: constants.INACTIVE_MSG_VN,
-                    inactive_msg_en: 'This function will available at xxxx',
-                    inactive_msg_jp: constants.INACTIVE_MSG_JP,
+                    has_back: false,
+                    active: true,
+                    image: 'https://tenten.smartocr.vn/images/baohiem_jp.png',
+                    url: constants.OCR_BAOHIEM_JP,
                     language: 'JP',
                 },
                 {
