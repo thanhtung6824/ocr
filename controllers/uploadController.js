@@ -210,6 +210,7 @@ module.exports = {
                     formData,
                     json: true,
                 };
+                console.log('options.urioptions.uri',options.uri)
                 const resultOcr = await rp(options);
                 req.body.resultOcr = resultOcr;
                 const insertData = await query.insertClientRequest(req.body);
