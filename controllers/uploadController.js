@@ -13,6 +13,7 @@ const {
 } = require('../helpers/shared');
 const constants = require('../constants/constants');
 const {uploadSingleValidator, uploadMultipleValidator} = require('../validator/uploadValidator');
+require('dotenv').config()
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -201,7 +202,7 @@ module.exports = {
                 formData.encode = req.body.encode;
                 stream.on('end', () => stream.destroy());
                 const options = {
-                    uri: constants.OCR_LOCAL_UPLOAD_API,
+                    uri: process.env.OCR_LOCAL_UPLOAD_API,
                     method: 'POST',
                     headers: {
                         'api-key': req.headers['api-key'],
@@ -333,7 +334,7 @@ module.exports = {
                     formData.encode = req.body.encode;
                     stream.on('end', () => stream.destroy());
                     const options = {
-                        uri: constants.OCR_LOCAL_UPLOAD_API,
+                        uri: process.env.OCR_LOCAL_UPLOAD_API,
                         method: 'POST',
                         headers: {
                             'api-key': req.headers['api-key'],

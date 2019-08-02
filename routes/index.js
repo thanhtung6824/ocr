@@ -15,7 +15,6 @@ router.get('/', (req, res) => {
 
 router.use(async (req, res, next) => {
     try {
-        console.log('calling')
         const apiKey = req.headers['api-key'];
         if (!apiKey) {
             return res.json({
