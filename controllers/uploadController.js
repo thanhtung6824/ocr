@@ -201,7 +201,7 @@ module.exports = {
                 formData.encode = req.body.encode;
                 stream.on('end', () => stream.destroy());
                 const options = {
-                    uri: constants.OCR_LOCAL_UPLOAD_API,
+                    uri: constants.OCR_UPLOAD_API,
                     method: 'POST',
                     headers: {
                         'api-key': req.headers['api-key'],
@@ -342,13 +342,6 @@ module.exports = {
                         json: true,
                     };
                     const resultOcr = await rp(options);
-                    for (let i = 0; i < 20; i++) {
-                        req.body.resultOcr = resultOcr;
-                        const insertData = await query.insertClientRequest(req.body);
-                        req.body.lastInsertId = insertData[0]; //eslint-disable-line
-                        req.body.ocr_text = enCrypted(JSON.stringify(req.body.resultOcr));
-                        await query.insertOcrRequest(req.body);
-                    }
                     response.push(resultOcr);
                 }));
                 return res.json(response);
