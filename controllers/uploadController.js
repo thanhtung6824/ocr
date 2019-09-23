@@ -13,7 +13,7 @@ const {
 } = require('../helpers/shared');
 const constants = require('../constants/constants');
 const {uploadSingleValidator, uploadMultipleValidator} = require('../validator/uploadValidator');
-require('dotenv').config()
+require('dotenv').config({path: __dirname + '/.env'})
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
