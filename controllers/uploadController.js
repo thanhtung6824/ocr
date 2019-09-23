@@ -110,7 +110,7 @@ module.exports = {
                     stream.on('end', () => stream.destroy());
                 }
                 const options = {
-                    uri: constants.OCR_LOCAL_UPLOAD_API,
+                    uri: constants.OCR_UPLOAD_API,
                     method: 'POST',
                     headers: {
                         'api-key': req.headers.api_key,
